@@ -1,9 +1,12 @@
 package com.wordpress.keerthanasriranga.musicalvehemence;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     SeekBar seekBar;
     Runnable runnable;
     Button pausebutton;
+    FloatingActionButton emotionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
 
         seekBar = (SeekBar) findViewById(R.id.seekBar);
 
+        emotionButton = (FloatingActionButton) findViewById(R.id.emotionButton);
+        emotionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, EmotionActivity.class);
+                startActivity(i);
+            }
+        });
+
 
 
         Field[] fields = R.raw.class.getFields();
@@ -63,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
 
+
+
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> adapterView, View view,int i,long l){
                 if (mediaPlayer!=null){
@@ -71,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 int resId = getResources().getIdentifier(list.get(i),"raw",getPackageName());
                 mediaPlayer = mediaPlayer.create(MainActivity.this,resId);
 
-                playcycle();
+                playCycle();
                 mediaPlayer.start();
                 seekBar.setMax(mediaPlayer.getDuration());
 
@@ -82,12 +98,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser)
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean input) {
+                if(input)
                 {
                     mediaPlayer.seekTo(progress);
+                    seekBar.setProgress(mediaPlayer.getCurrentPosition());
                 }
             }
 
@@ -115,8 +134,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
-    public void playcycle()
+    public void playCycle()
     {
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
 
@@ -125,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
             runnable=new Runnable() {
                 @Override
                 public void run() {
-                    playcycle();
+                    playCycle();
+
                 }
             };
             handler.postDelayed(runnable,1000);

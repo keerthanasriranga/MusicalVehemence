@@ -32,4 +32,18 @@
         android:layout_marginLeft="7dp"
         android:textSize="10dp"
         android:layout_alignParentStart="true" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/emotionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        android:layout_margin="25dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
+
 </RelativeLayout>
