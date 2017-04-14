@@ -9,7 +9,27 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="450dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp" />
+
+    <Button
+        android:id="@+id/pausebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play/Pause"
+        android:layout_below="@+id/listView"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="7dp"
+        android:textSize="10dp"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
