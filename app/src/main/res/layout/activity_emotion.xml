@@ -22,6 +22,7 @@
         android:layout_alignBottom="@+id/emotion"
         android:layout_alignRight="@+id/imageView"
         android:layout_alignEnd="@+id/imageView"
+        android:background="#f49842"
         android:layout_marginEnd="14dp" />
 
     <TextView
@@ -32,15 +33,28 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="90dp"
         android:layout_marginTop="31dp"
+        android:textColor="#f49842"
         android:text="Not yet recognised" />
 
     <Button
         android:id="@+id/emoplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="22dp"
+        android:layout_marginBottom="25dp"
         android:text="Pause/Play"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:background="#f49842"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignStart="@+id/imageView" />
+
+    <Button
+        android:id="@+id/clickpic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/imageView"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_alignTop="@+id/emoplay"
+        android:background="#f49842"
+        android:text="Capture" />
 
 </RelativeLayout>

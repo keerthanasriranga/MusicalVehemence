@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wordpress.keerthanasriranga.musicalvehemence">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -16,10 +16,18 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+
+            </intent-filter>
+        </activity>
+        <activity android:name=".EmotionActivity" />
+
+        <activity android:name=".SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EmotionActivity"></activity>
     </application>
 
 </manifest>

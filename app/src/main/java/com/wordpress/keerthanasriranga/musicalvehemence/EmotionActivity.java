@@ -1,10 +1,13 @@
 package com.wordpress.keerthanasriranga.musicalvehemence;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +35,21 @@ public class EmotionActivity extends AppCompatActivity {
     TextView emotion;
     MediaPlayer mplayer;
     Button emoplay;
+    Button clickpic;
+    ImageView imageView;
+    public static final int REQUEST_CAPTURE=1;
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CAPTURE)
+        if(resultCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap photo = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(photo);
+
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +57,14 @@ public class EmotionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_emotion);
         emotion = (TextView) findViewById(R.id.emotion);
         emoplay = (Button) findViewById(R.id.emoplay);
+        clickpic = (Button) findViewById(R.id.clickpic);
         int[] p = {R.drawable.angry, R.drawable.disgust,R.drawable.happy, R.drawable.sad, R.drawable.surprise};
 
         Random r = new Random();
         int i1 = 0 +  r.nextInt(4);
 
         final Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), p[i1]);
-        final ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        imageView = (ImageView)findViewById(R.id.imageView);
         imageView.setImageBitmap(mBitmap);
 
         Button btnProcess = (Button) findViewById(R.id.btnemotion);
@@ -122,6 +140,24 @@ public class EmotionActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if(!hasCamera()){
+            clickpic.setEnabled(false);
+        }
+        clickpic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(in, REQUEST_CAPTURE);
+            }
+        });
+
+
+
+    }
+
+    private boolean hasCamera() {
+        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
     }
 
     private String getEmo(RecognizeResult res) {

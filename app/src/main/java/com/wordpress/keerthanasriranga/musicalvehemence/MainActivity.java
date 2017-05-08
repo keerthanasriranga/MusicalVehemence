@@ -1,5 +1,6 @@
 package com.wordpress.keerthanasriranga.musicalvehemence;
 
+import android.app.LauncherActivity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.design.widget.FloatingActionButton;
