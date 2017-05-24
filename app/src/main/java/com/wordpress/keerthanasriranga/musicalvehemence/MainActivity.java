@@ -1,8 +1,11 @@
 package com.wordpress.keerthanasriranga.musicalvehemence;
 
 import android.app.LauncherActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Handler;
-
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -58,8 +61,11 @@ public class MainActivity extends AppCompatActivity {
         emotionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, EmotionActivity.class);
-                startActivity(i);
+                if(!isNetworkAvailable())
+                    Toast.makeText(MainActivity.this, "Connect to internet to access Emotion Recognition feature", Toast.LENGTH_LONG).show();
+
+                else{Intent i = new Intent(MainActivity.this, EmotionActivity.class);
+                startActivity(i);}
             }
         });
 
@@ -91,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 playCycle();
                 mediaPlayer.start();
                 seekBar.setMax(mediaPlayer.getDuration());
-
             }
         });
 
@@ -179,5 +184,11 @@ public class MainActivity extends AppCompatActivity {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

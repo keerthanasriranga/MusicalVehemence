@@ -10,41 +10,41 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="450dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/listView"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/listView"
         android:layout_marginTop="15dp" />
 
     <Button
         android:id="@+id/pausebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Play/Pause"
-        android:layout_below="@+id/listView"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/listView"
         android:layout_marginLeft="7dp"
-        android:textSize="10dp"
         android:background="#f49842"
-        android:layout_alignParentStart="true" />
+        android:text="Play/Pause"
+        android:textSize="10dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/emotionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="25dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:clickable="true"
         app:fabSize="mini"
-        app:srcCompat="@android:drawable/btn_star_big_on"
-        android:layout_margin="25dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"/>
+        app:srcCompat="@android:drawable/btn_star_big_on" />
 
 </RelativeLayout>

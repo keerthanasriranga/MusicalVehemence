@@ -12,18 +12,20 @@
         android:layout_height="300dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
     <Button
         android:id="@+id/btnemotion"
-        android:text="process"
-        android:layout_marginRight="14dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/emotion"
         android:layout_alignBottom="@+id/emotion"
-        android:layout_alignRight="@+id/imageView"
         android:layout_alignEnd="@+id/imageView"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_marginEnd="14dp"
+        android:layout_marginRight="14dp"
         android:background="#f49842"
-        android:layout_marginEnd="14dp" />
+        android:text="process"
+        tools:backgroundTintMode="screen" />
 
     <TextView
         android:id="@+id/emotion"

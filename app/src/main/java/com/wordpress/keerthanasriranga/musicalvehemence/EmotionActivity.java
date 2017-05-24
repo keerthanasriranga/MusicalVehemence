@@ -1,11 +1,14 @@
 package com.wordpress.keerthanasriranga.musicalvehemence;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +40,7 @@ public class EmotionActivity extends AppCompatActivity {
     Button emoplay;
     Button clickpic;
     ImageView imageView;
+    Button btnProcess;
     public static final int REQUEST_CAPTURE=1;
 
 
@@ -67,7 +71,7 @@ public class EmotionActivity extends AppCompatActivity {
         imageView = (ImageView)findViewById(R.id.imageView);
         imageView.setImageBitmap(mBitmap);
 
-        Button btnProcess = (Button) findViewById(R.id.btnemotion);
+        btnProcess = (Button) findViewById(R.id.btnemotion);
 
         //Convert image to stream
 
@@ -75,52 +79,56 @@ public class EmotionActivity extends AppCompatActivity {
         mBitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
+
         btnProcess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AsyncTask<InputStream,String,List<RecognizeResult>> emotionTask = new AsyncTask<InputStream,String,List<RecognizeResult>>()
-                {
+                if(!isNetworkAvailable())
+                    Toast.makeText(EmotionActivity.this, "Connect to internet to access Emotion Recognition feature", Toast.LENGTH_LONG).show();
+                else {
+                    AsyncTask<InputStream, String, List<RecognizeResult>> emotionTask = new AsyncTask<InputStream, String, List<RecognizeResult>>() {
 
-                    ProgressDialog mDialog = new ProgressDialog(EmotionActivity.this);
+                        ProgressDialog mDialog = new ProgressDialog(EmotionActivity.this);
 
-                    @Override
-                    protected List<RecognizeResult> doInBackground(InputStream... params) {
-                        try
-                        {
-                            publishProgress("Recognising.....");
-                            List<RecognizeResult> result = emotionServiceClient.recognizeImage(params[0]);
-                            return result;
+                        @Override
+                        protected List<RecognizeResult> doInBackground(InputStream... params) {
+                            try {
+
+                                publishProgress("Recognising.....");
+                                List<RecognizeResult> result = emotionServiceClient.recognizeImage(params[0]);
+                                return result;
+                            } catch (Exception ex) {
+                                return null;
+
+                            }
+
                         }
-                        catch (Exception ex){
-                            return null;
+
+                        @Override
+                        protected void onPreExecute() {
+                            mDialog.show();
                         }
 
-                    }
-
-                    @Override
-                    protected void onPreExecute() {
-                        mDialog.show();
-                    }
-
-                    @Override
-                    protected void onPostExecute(List<RecognizeResult> recognizeResults) {
-                        mDialog.dismiss();
-                        for (RecognizeResult res : recognizeResults)
-                        {
-                            String status;
-                            status = getEmo(res);
-                            imageView.setImageBitmap(ImageHelper.drawRectOnBitmap(mBitmap, res.faceRectangle, status));
+                        @Override
+                        protected void onPostExecute(List<RecognizeResult> recognizeResults) {
+                            mDialog.dismiss();
+                            for (RecognizeResult res : recognizeResults) {
+                                String status;
+                                status = getEmo(res);
+                                imageView.setImageBitmap(ImageHelper.drawRectOnBitmap(mBitmap, res.faceRectangle, status));
+                            }
                         }
-                    }
 
-                    @Override
-                    protected void onProgressUpdate(String... values) {
-                        mDialog.setMessage(values[0]);
-                    }
-                };
-                emotionTask.execute(inputStream);
+                        @Override
+                        protected void onProgressUpdate(String... values) {
+                            mDialog.setMessage(values[0]);
+                        }
+                    };
+                    emotionTask.execute(inputStream);
+                }
             }
         });
+
         emoplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,9 +157,9 @@ public class EmotionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent in = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(in, REQUEST_CAPTURE);
+
             }
         });
-
 
 
     }
@@ -230,7 +238,18 @@ public class EmotionActivity extends AppCompatActivity {
             mplayer.start();
             return "Neutral";
         }
+
+
+
+
     }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
 
 
 }
