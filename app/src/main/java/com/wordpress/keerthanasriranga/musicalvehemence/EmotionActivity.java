@@ -32,27 +32,31 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static com.wordpress.keerthanasriranga.musicalvehemence.MainActivity.mediaPlayer;
+
 public class EmotionActivity extends AppCompatActivity {
 
     public EmotionServiceClient emotionServiceClient = new EmotionServiceRestClient("a421fd6dc6a24147abe0942f52e270ca");
     TextView emotion;
-    MediaPlayer mplayer;
+    static MediaPlayer mplayer;
     Button emoplay;
     Button clickpic;
     ImageView imageView;
     Button btnProcess;
     public static final int REQUEST_CAPTURE=1;
+        int i1;
+        int position;
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CAPTURE)
-        if(resultCode == RESULT_OK){
-            Bundle extras = data.getExtras();
-            Bitmap photo = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(photo);
+            if(resultCode == RESULT_OK){
+                Bundle extras = data.getExtras();
+                Bitmap photo = (Bitmap) extras.get("data");
+                imageView.setImageBitmap(photo);
 
-        }
+            }
     }
 
     @Override
@@ -65,7 +69,10 @@ public class EmotionActivity extends AppCompatActivity {
         int[] p = {R.drawable.angry, R.drawable.disgust,R.drawable.happy, R.drawable.sad, R.drawable.surprise};
 
         Random r = new Random();
-        int i1 = 0 +  r.nextInt(4);
+        if (savedInstanceState != null) {
+            i1 = savedInstanceState.getInt("number", 0);
+        }
+        else i1 = 0 +  r.nextInt(4);
 
         final Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), p[i1]);
         imageView = (ImageView)findViewById(R.id.imageView);
@@ -249,7 +256,39 @@ public class EmotionActivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // Make sure to call the super method so that the states of our views are saved
+        super.onSaveInstanceState(outState);
+        if(mplayer!=null) {
+            outState.putInt("Position", mplayer.getCurrentPosition());
+            outState.putBoolean("isplaying", mplayer.isPlaying());
 
+            if (mplayer.isPlaying())
+                mplayer.pause();
+        }
+        // Save our own state now
+        outState.putInt("number", i1);
+    }
+
+
+
+
+    @Override
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+
+        position = savedInstanceState.getInt("Position");
+        if(mplayer!=null) {
+            mplayer.seekTo(position);
+            if (savedInstanceState.getBoolean("isplaying"))
+                mplayer.start();
+
+        }
+
+    }
 
 
 }

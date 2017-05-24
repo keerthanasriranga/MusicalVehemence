@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context="com.wordpress.keerthanasriranga.musicalvehemence.EmotionActivity">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
     <Button
         android:id="@+id/btnemotion"
@@ -31,23 +32,23 @@
         android:id="@+id/emotion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="90dp"
         android:layout_marginTop="31dp"
-        android:textColor="#f49842"
-        android:text="Not yet recognised" />
+        android:text="Not yet recognised"
+        android:textColor="#f49842" />
 
     <Button
         android:id="@+id/emoplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
-        android:text="Pause/Play"
-        android:layout_alignParentBottom="true"
-        android:background="#f49842"
         android:layout_alignLeft="@+id/imageView"
-        android:layout_alignStart="@+id/imageView" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/imageView"
+        android:layout_marginBottom="25dp"
+        android:background="#f49842"
+        android:text="Pause/Play" />
 
     <Button
         android:id="@+id/clickpic"

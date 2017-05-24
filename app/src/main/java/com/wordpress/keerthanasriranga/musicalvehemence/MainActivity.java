@@ -35,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
     List<String>list;
 
     ListAdapter adapter;
+    int position;
 
-    MediaPlayer mediaPlayer;
+    static MediaPlayer mediaPlayer;
     Handler handler;
     SeekBar seekBar;
     Runnable runnable;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Connect to internet to access Emotion Recognition feature", Toast.LENGTH_LONG).show();
 
                 else{Intent i = new Intent(MainActivity.this, EmotionActivity.class);
-                startActivity(i);}
+                    startActivity(i);}
             }
         });
 
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean input) {
                 if(input)
                 {
+
                     mediaPlayer.seekTo(progress);
                     seekBar.setProgress(mediaPlayer.getCurrentPosition());
                 }
@@ -191,4 +193,35 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        super.onSaveInstanceState(savedInstanceState);
+        if(mediaPlayer!=null) {
+            savedInstanceState.putInt("Position", mediaPlayer.getCurrentPosition());
+            savedInstanceState.putBoolean("isplaying", mediaPlayer.isPlaying());
+
+            if (mediaPlayer.isPlaying())
+                mediaPlayer.pause();
+        }
+
+    }
+
+
+    @Override
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+
+        position = savedInstanceState.getInt("Position");
+        if(mediaPlayer!=null) {
+            mediaPlayer.seekTo(position);
+            if (savedInstanceState.getBoolean("isplaying"))
+                mediaPlayer.start();
+
+        }
+
+    }
+
+
 }
