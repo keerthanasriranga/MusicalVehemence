@@ -36,13 +36,16 @@ import static com.wordpress.keerthanasriranga.musicalvehemence.MainActivity.medi
 
 public class EmotionActivity extends AppCompatActivity {
 
-    public EmotionServiceClient emotionServiceClient = new EmotionServiceRestClient("a421fd6dc6a24147abe0942f52e270ca");
+    final EmotionServiceClient emotionServiceClient = new EmotionServiceRestClient("a421fd6dc6a24147abe0942f52e270ca");
     TextView emotion;
     static MediaPlayer mplayer;
     Button emoplay;
     Button clickpic;
     ImageView imageView;
     Button btnProcess;
+
+    ByteArrayInputStream inputStream =null;
+    Bitmap photo=null;
     public static final int REQUEST_CAPTURE=1;
         int i1;
         int position;
@@ -53,46 +56,59 @@ public class EmotionActivity extends AppCompatActivity {
         if(requestCode == REQUEST_CAPTURE)
             if(resultCode == RESULT_OK){
                 Bundle extras = data.getExtras();
-                Bitmap photo = (Bitmap) extras.get("data");
+                photo = (Bitmap) extras.get("data");
                 imageView.setImageBitmap(photo);
+                btnProcess.setEnabled(true);
+
+
 
             }
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emotion);
         emotion = (TextView) findViewById(R.id.emotion);
         emoplay = (Button) findViewById(R.id.emoplay);
         clickpic = (Button) findViewById(R.id.clickpic);
-        int[] p = {R.drawable.angry, R.drawable.disgust,R.drawable.happy, R.drawable.sad, R.drawable.surprise};
+        //int[] p = {R.drawable.angry, R.drawable.disgust,R.drawable.happy, R.drawable.sad, R.drawable.surprise};
 
-        Random r = new Random();
+       /* Random r = new Random();
         if (savedInstanceState != null) {
             i1 = savedInstanceState.getInt("number", 0);
         }
         else i1 = 0 +  r.nextInt(4);
 
-        final Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), p[i1]);
+         mBitmap = BitmapFactory.decodeResource(getResources(), p[i1]);
         imageView = (ImageView)findViewById(R.id.imageView);
-        imageView.setImageBitmap(mBitmap);
+        imageView.setImageBitmap(mBitmap);*/
 
         btnProcess = (Button) findViewById(R.id.btnemotion);
 
         //Convert image to stream
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        mBitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
-        final ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-
-
+       //final  ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        //mBitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+      //   inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        imageView = (ImageView)findViewById(R.id.imageView);
+        if(photo == null)
+        {
+            btnProcess.setEnabled(false);
+        }
         btnProcess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnProcess.setEnabled(false);
                 if(!isNetworkAvailable())
                     Toast.makeText(EmotionActivity.this, "Connect to internet to access Emotion Recognition feature", Toast.LENGTH_LONG).show();
                 else {
+
+                    final  ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+                    inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+
+
                     AsyncTask<InputStream, String, List<RecognizeResult>> emotionTask = new AsyncTask<InputStream, String, List<RecognizeResult>>() {
 
                         ProgressDialog mDialog = new ProgressDialog(EmotionActivity.this);
@@ -109,6 +125,7 @@ public class EmotionActivity extends AppCompatActivity {
 
                             }
 
+
                         }
 
                         @Override
@@ -119,12 +136,15 @@ public class EmotionActivity extends AppCompatActivity {
                         @Override
                         protected void onPostExecute(List<RecognizeResult> recognizeResults) {
                             mDialog.dismiss();
+
                             for (RecognizeResult res : recognizeResults) {
                                 String status;
                                 status = getEmo(res);
-                                imageView.setImageBitmap(ImageHelper.drawRectOnBitmap(mBitmap, res.faceRectangle, status));
+                                imageView.setImageBitmap(ImageHelper.drawRectOnBitmap(photo, res.faceRectangle, status));
+
                             }
                         }
+
 
                         @Override
                         protected void onProgressUpdate(String... values) {

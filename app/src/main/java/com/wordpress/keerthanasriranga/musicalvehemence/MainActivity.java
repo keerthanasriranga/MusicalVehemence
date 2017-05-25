@@ -35,13 +35,14 @@ public class MainActivity extends AppCompatActivity {
     List<String>list;
 
     ListAdapter adapter;
-    int position;
-
+    int position1;
+    int progress;
     static MediaPlayer mediaPlayer;
     Handler handler;
     SeekBar seekBar;
     Runnable runnable;
     Button pausebutton;
+
     FloatingActionButton emotionButton;
 
     @Override
@@ -94,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 int resId = getResources().getIdentifier(list.get(i),"raw",getPackageName());
                 mediaPlayer = mediaPlayer.create(MainActivity.this,resId);
-
-                playCycle();
                 mediaPlayer.start();
+                playCycle();
+
                 seekBar.setMax(mediaPlayer.getDuration());
             }
         });
@@ -132,13 +133,15 @@ public class MainActivity extends AppCompatActivity {
         pausebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mediaPlayer!=null){
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
                     pausebutton.setText("Play");
                 } else {
                     mediaPlayer.start();
                     pausebutton.setText("Pause");
-                }
+                }}
+                else{Toast.makeText(MainActivity.this,"Choose a song",Toast.LENGTH_LONG).show();}
             }
         });
 
@@ -147,18 +150,22 @@ public class MainActivity extends AppCompatActivity {
     }
     public void playCycle()
     {
+        Log.i("Seekbar",String.valueOf(mediaPlayer.getCurrentPosition()));
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
 
+        if(!mediaPlayer.isPlaying()) Log.i("Seekbar","Not playing");
         if(mediaPlayer.isPlaying())
         {
+            Log.i("Seekbar",String.valueOf(mediaPlayer.getCurrentPosition()));
             runnable=new Runnable() {
                 @Override
                 public void run() {
+                    Log.i("Seekbar",String.valueOf(mediaPlayer.getCurrentPosition()));
                     playCycle();
 
                 }
             };
-            handler.postDelayed(runnable,1000);
+            handler.postDelayed(runnable,100);
         }
     }
 
@@ -199,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         if(mediaPlayer!=null) {
             savedInstanceState.putInt("Position", mediaPlayer.getCurrentPosition());
             savedInstanceState.putBoolean("isplaying", mediaPlayer.isPlaying());
-
+            savedInstanceState.putInt("seekbar",seekBar.getProgress());
             if (mediaPlayer.isPlaying())
                 mediaPlayer.pause();
         }
@@ -212,12 +219,17 @@ public class MainActivity extends AppCompatActivity {
     public void onRestoreInstanceState(Bundle savedInstanceState) {
 
         super.onRestoreInstanceState(savedInstanceState);
-
-        position = savedInstanceState.getInt("Position");
+        progress = savedInstanceState.getInt("seekbar");
+        position1 = savedInstanceState.getInt("Position");
+        seekBar.setProgress(progress);
         if(mediaPlayer!=null) {
-            mediaPlayer.seekTo(position);
+            mediaPlayer.seekTo(position1);
             if (savedInstanceState.getBoolean("isplaying"))
                 mediaPlayer.start();
+                seekBar.setProgress(progress);
+
+
+
 
         }
 
