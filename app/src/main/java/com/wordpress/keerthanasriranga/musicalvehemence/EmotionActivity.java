@@ -47,8 +47,8 @@ public class EmotionActivity extends AppCompatActivity {
     ByteArrayInputStream inputStream =null;
     Bitmap photo=null;
     public static final int REQUEST_CAPTURE=1;
-        int i1;
-        int position;
+    int i1;
+    int position;
 
 
     @Override
@@ -79,7 +79,6 @@ public class EmotionActivity extends AppCompatActivity {
             i1 = savedInstanceState.getInt("number", 0);
         }
         else i1 = 0 +  r.nextInt(4);
-
          mBitmap = BitmapFactory.decodeResource(getResources(), p[i1]);
         imageView = (ImageView)findViewById(R.id.imageView);
         imageView.setImageBitmap(mBitmap);*/
@@ -88,9 +87,9 @@ public class EmotionActivity extends AppCompatActivity {
 
         //Convert image to stream
 
-       //final  ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        //final  ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         //mBitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
-      //   inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        //   inputStream = new ByteArrayInputStream(outputStream.toByteArray());
         imageView = (ImageView)findViewById(R.id.imageView);
         if(photo == null)
         {

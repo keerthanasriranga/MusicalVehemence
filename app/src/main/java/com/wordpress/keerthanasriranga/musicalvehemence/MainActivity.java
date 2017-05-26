@@ -111,12 +111,13 @@ public class MainActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean input) {
-                if(input)
+               if(mediaPlayer!=null) { if(input)
                 {
 
                     mediaPlayer.seekTo(progress);
                     seekBar.setProgress(mediaPlayer.getCurrentPosition());
-                }
+                }}
+                else Toast.makeText(MainActivity.this , "Choose a song first", Toast.LENGTH_LONG);
             }
 
             @Override
@@ -134,13 +135,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(mediaPlayer!=null){
-                if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
-                    pausebutton.setText("Play");
-                } else {
-                    mediaPlayer.start();
-                    pausebutton.setText("Pause");
-                }}
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.pause();
+                        pausebutton.setText("Play");
+                    } else {
+                        mediaPlayer.start();
+                        pausebutton.setText("Pause");
+                    }}
                 else{Toast.makeText(MainActivity.this,"Choose a song",Toast.LENGTH_LONG).show();}
             }
         });
@@ -226,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer.seekTo(position1);
             if (savedInstanceState.getBoolean("isplaying"))
                 mediaPlayer.start();
-                seekBar.setProgress(progress);
+            seekBar.setProgress(progress);
 
 
 
